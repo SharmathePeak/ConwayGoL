@@ -1,10 +1,13 @@
 import sys
 
+gen = 1
+print(gen)
 # Read line by line from standard input
 for line in sys.stdin:
     clean_line = line.strip()
     print(clean_line)
-    i = 0
-    while i < len(clean_line):
-        print(f"Damn {clean_line[i]}")
-        i += 1
+    if clean_line != "---":
+        pass
+    else:
+        gen += 1
+        print(gen)
