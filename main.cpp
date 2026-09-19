@@ -10,15 +10,19 @@ int grid[y][x];
 int buffergrid[y][x];
 
 void init() {
-  int r = 5, c = 5; // top-left offset — needs room to fly, place near a corner
-  int cells[][2] = {{0, 24}, {1, 22}, {1, 24}, {2, 12}, {2, 13}, {2, 20},
-                    {2, 21}, {2, 34}, {2, 35}, {3, 11}, {3, 15}, {3, 20},
-                    {3, 21}, {3, 34}, {3, 35}, {4, 0},  {4, 1},  {4, 10},
-                    {4, 16}, {4, 20}, {4, 21}, {5, 0},  {5, 1},  {5, 10},
-                    {5, 14}, {5, 16}, {5, 17}, {5, 22}, {5, 24}, {6, 10},
-                    {6, 16}, {6, 24}, {7, 11}, {7, 15}, {8, 12}, {8, 13}};
-  for (auto &p : cells)
-    grid[r + p[0]][c + p[1]] = 1;
+  int r = 18, c = 18;
+  int rows[] = {0, 5, 7, 12};
+  int cols3[] = {2, 3, 4, 8, 9, 10}; // the horizontal 3-cell bars
+  int rows4[] = {2, 3, 4, 8, 9, 10};
+  int cols1[] = {0, 5, 7, 12}; // the single-cell verticals
+
+  for (int rr : rows)
+    for (int cc : cols3)
+      grid[r + rr][c + cc] = 1;
+
+  for (int rr : rows4)
+    for (int cc : cols1)
+      grid[r + rr][c + cc] = 1;
 }
 
 void draw() {
