@@ -8,7 +8,7 @@ c_bl = (0, 0, 0)
 c_def = (128, 128, 128)
 
 g.init()
-screen = g.display.set_mode((600, 600), g.RESIZABLE)
+screen = g.display.set_mode((620, 620))  # , g.RESIZABLE)
 g.display.set_caption("Title")
 clock = g.time.Clock()
 
