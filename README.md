@@ -1,6 +1,12 @@
 # Conway's Game of Life
 
-A multi-language implementation of Conway's Game of Life — simulation logic in C++, rendering in Python, connected via a Unix pipe.
+A multi-language implementation of Conway's Game of Life — simulation logic in C++, rendering in Python.
+
+## Preview
+
+![Pulsar pattern](GoL.gif)
+
+*Pulsar oscillator (period 3) — screen recording of the actual pygame renderer, one full loop.*
 
 ## Architecture
 
@@ -8,11 +14,9 @@ A multi-language implementation of Conway's Game of Life — simulation logic in
 C++ (simulation) --stdout--> pipe --stdin--> Python (rendering, pygame)
 ```
 
-- **C++** owns the grid state and simulation rules. Computes each generation and writes it to stdout as plain text, one row per line, with a `---` sentinel marking the end of a frame.
-- **Python** reads frames from stdin and draws them with pygame.
-- Communication is one-way (C++ → Python) over a standard pipe (`./gol | python3 render.py`).
-
-This split was built partly as an exercise in cross-language IPC — understanding how two processes in different languages talk over stdin/stdout, buffering behavior, and frame framing (the `---` sentinel), before moving to raw `pipe()`/`fork()`/`exec()` syscalls.
+- **C++** owns the grid state and simulation rules. Computes each generation and writes it to stdout as plain text — one row per line, with a `---` sentinel marking the end of a frame.
+- **Python** reads frames from stdin (on a background thread, via a queue) and draws them with pygame.
+- Communication is one-way (C++ → Python) over a standard Unix pipe.
 
 ## Rules
 
@@ -21,23 +25,11 @@ Standard Conway's Game of Life:
 - A dead cell with exactly 3 live neighbors becomes alive.
 - Any other cell dies or stays dead.
 
-Grid is currently fixed-size (not infinite/toroidal) — edge cells have fewer neighbors, which affects behavior near boundaries.
+Grid is fixed-size (not infinite/toroidal) — cells near the edge have fewer neighbors, and patterns that move (like gliders) disappear once they reach the boundary.
 
 ## Seeding
 
-Initial cell positions are set programmatically for now. A custom lexer/parser for a seed-definition format (to specify starting patterns without recompiling) is planned.
-
-## Version Control
-
-This project uses [jj (Jujutsu)](https://github.com/martinvonz/jj) on a colocated git backend — standard `git`/GitHub tooling works normally alongside it.
-
-## Status
-
-- [x] Core simulation logic (double-buffered generation updates)
-- [x] Basic pipe output from C++
-- [ ] Python/pygame rendering of piped frames
-- [ ] Custom lexer/parser for seed patterns
-- [ ] Configurable grid size (currently fixed small grid for testing)
+Initial cell positions are currently set in code (`init()`). Supports classic patterns for testing: pentadecathlon (p15), pulsar (p3), figure eight (p8), and the Gosper glider gun. A custom lexer/parser for a text-based seed format is planned, so patterns can be defined without recompiling.
 
 ## Running
 
