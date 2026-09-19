@@ -1,5 +1,7 @@
+#include <chrono>
 #include <cstring>
 #include <iostream>
+#include <thread>
 using namespace std;
 
 const int x = 25;
@@ -120,6 +122,7 @@ int main(void) {
     memcpy(buffergrid, grid, sizeof(grid));
     logic();
     i++;
+    this_thread::sleep_for(chrono::milliseconds(1000));
   }
   return 0;
 }
